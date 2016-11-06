@@ -44,29 +44,31 @@ void fun2 (std::list<T>& points) {
 		} else {
 			*it -= FLT_MIN;
 		}
+	}
 /*
-		if (i == 9) {
-			if (std::abs(*it - *prev) < 1.0-*it) {
-				*it += FLT_MIN;
-			} else {
-				*it -= FLT_MIN;
-			}
-		}
-*/	}
-	
+	std::list<float>::iterator it = std::next(points.end(), -1);
+	std::list<float>::iterator prev = std::next(it, -1);
+	//std::list<float>::iterator next = std::next(it, 1);
+
+	if (std::abs(*it - *prev) < (1.0 - *it)) {
+		*it += FLT_MIN;
+	} else {
+		*it -= FLT_MIN;
+	}
+*/
 }
 
 
 int main() {
-	std::list<float> points = {0,0.11,0.2,0.34, 0.36,0.3666,0.77,0.78,0.788,1.0};
+	std::list<float> points = {0,0.11,0.14442,0.3,1.0};
+
 	print(points);
 	fun2(points);
 	print(points);
-	for (std::size_t i = 1; i < 300; ++i) {
+	for (std::size_t i = 1; i < 30000; ++i) {
 		fun2(points);
 	//	print(points);
 	}
 	print(points);
 
-	std::cout << FLT_MIN << std::endl;
 }
