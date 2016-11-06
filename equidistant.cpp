@@ -58,6 +58,19 @@ void fun2 (std::list<T>& points) {
 */
 }
 
+class Sphere{
+	float theta, phi;
+	float x,y,z;
+	public:
+	void setCoord();	
+};
+
+void Sphere::setCoord () {
+	x = cos(theta) * cos(phi);
+	y = cos(theta) * sin(phi);
+	z = sin(theta);
+}
+
 
 int main() {
 	std::list<float> points = {0,0.11,0.14442,0.3,1.0};
@@ -70,5 +83,7 @@ int main() {
 	//	print(points);
 	}
 	print(points);
+
+	Sphere * test= new Sphere();
 
 }
