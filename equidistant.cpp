@@ -81,18 +81,18 @@ void fun3 (std::list<Spherepoint>& points) {
 		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
 		std::list<Spherepoint>::iterator prev = std::next(it, -1);
 		std::list<Spherepoint>::iterator next = std::next(it, 1);
-//		tmp = ((*prev).phi + (*next).phi) / 2.0;
-		if (std::abs(it->phi - prev->phi) < std::abs(it->phi - next->phi)) {
+		it->phi = ((*prev).phi + (*next).phi) / 2.0;
+/*		if (std::abs(it->phi - prev->phi) < std::abs(it->phi - next->phi)) {
 			it->phi += FLT_MIN;
 		} else {
 			it->phi -= FLT_MIN;
 		}
-	}
+*/	}
 }
 
 void Sphereprint (std::list<Spherepoint>& points) {
 	std::size_t size = points.size();
-	for (std::size_t i = 1; i < size; ++i) {
+	for (std::size_t i = 0; i < size; ++i) {
 		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
 		std::cout << it->phi << " \t";	
 	}
@@ -125,7 +125,7 @@ int main() {
 	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4, *obj5};
 	
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 400000; ++i) {
+	for (std::size_t i = 1; i < 30; ++i) {
 		fun3(Spoints);
 		Sphereprint(Spoints);
 	}
