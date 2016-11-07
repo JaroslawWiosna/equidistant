@@ -113,7 +113,7 @@ void fun3 (std::list<Spherepoint>& points) {
 }
 
 void fun4 (std::list<Spherepoint>& points) {
-	std::list<Spherepoint>::iterator closest1, closest2, closest3;
+	std::list<Spherepoint>::iterator closest0, closest1, closest2, closest3;
 	std::size_t size = points.size();
 
 	float * distance = new float[size];
@@ -141,15 +141,17 @@ void fun4 (std::list<Spherepoint>& points) {
 		}
 		*/	
 	
-		closest1 = std::next(points.begin(), 2);
-		closest2 = std::next(points.begin(), 3);
-		closest3 = std::next(points.begin(), 4);
+		closest0 = std::next(points.begin(), 0);
+		closest1 = std::next(points.begin(), 1);
+		closest2 = std::next(points.begin(), 2);
+		closest3 = std::next(points.begin(), 3);
 
+		// a huge hack :( <----- onlyfor 4 points
 		// compute mean
-		meanPhi = closest1->phi + closest2->phi + closest3->phi;
+		meanPhi = closest0->phi + closest1->phi + closest2->phi + closest3->phi - it->phi;
 		meanPhi /= 3.0;
 		// TODO remenber that sometimes you should add PI to phi,then modulo 2PI  
-		meanTheta = closest1->theta + closest2->theta + closest3->theta;
+		meanTheta = closest0->theta + closest1->theta + closest2->theta + closest3->theta - it->theta;
 		meanTheta /= 3.0;
 		// TODO remenber that sometimes you should multiply theta by -1 
 
@@ -184,16 +186,16 @@ int main() {
 	print(points);
 
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(0,-1);
-	Spherepoint * obj2= new Spherepoint(0,0.25);
-	Spherepoint * obj3= new Spherepoint(0,0.26);
-	Spherepoint * obj4= new Spherepoint(0,1.44);
+	Spherepoint * obj1= new Spherepoint(0.11,-1);
+	Spherepoint * obj2= new Spherepoint(0.2,0.25);
+	Spherepoint * obj3= new Spherepoint(1.3,0.26);
+	Spherepoint * obj4= new Spherepoint(1.66,1.44);
 
 	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4};
 	
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 3000; ++i) {
-		fun3(Spoints);
+	for (std::size_t i = 1; i < 2002; ++i) {
+		fun4(Spoints);
 	}
 	Sphereprint(Spoints);
 
@@ -312,7 +314,7 @@ int main() {
   renderWindowInteractor->SetRenderWindow(renderWindow);
  
   // Add the actors to the scene
-  renderer->AddActor(actor1);
+//  renderer->AddActor(actor1);
   renderer->AddActor(actor2);
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
