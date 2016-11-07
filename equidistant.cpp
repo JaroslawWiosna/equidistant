@@ -82,10 +82,10 @@ void fun2 (std::list<T>& points) {
 
 class Spherepoint{
 	public:
-	float theta, phi;
+	float phi, theta;
 	float x,y,z;
 	void setCoord();	
-	Spherepoint(float THETA = 0, float PHI = 0) : theta(THETA), phi(PHI) {} 
+	Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {} 
 };
 
 void Spherepoint::setCoord () {
@@ -110,6 +110,40 @@ void fun3 (std::list<Spherepoint>& points) {
 			it->phi -= FLT_MIN;
 		}
 */	}
+}
+
+void fun4 (std::list<Spherepoint>& points) {
+	std::list<Spherepoint>::iterator closest1, closest2, closest3;
+	std::size_t size = points.size();
+
+	float * distance = new float[size];
+	float meanTheta{}, meanPhi;
+
+	for (std::size_t i = 0; i < size; ++i) {
+		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
+		for (std::size_t j = 0; j < size; ++j) {
+			std::list<Spherepoint>::iterator jt = std::next(points.begin(), j);
+			// distance[j] is distance between it and 'j'
+			distance[j] = sqrt( (it->x - jt->x)*(it->x - jt->x) + (it->x - jt->x)*(it->y - jt->y) + (it->z - jt->z)*(it->z - jt->z) );
+		}
+		// let's find 3 the closest points to it
+		// TODO !!!
+		// let's 'hardcode' it for a while. our points are j=2,j=3,j=4
+		closest1 = std::next(points.begin(), 2);
+		closest2 = std::next(points.begin(), 3);
+		closest3 = std::next(points.begin(), 4);
+
+		// compute mean
+		meanPhi = closest1->phi + closest2->phi + closest3->phi;
+		meanPhi /= 3.0;
+		// TODO remenber that sometimes you should add PI to phi,then modulo 2PI  
+		meanTheta = closest1->theta + closest2->theta + closest3->theta;
+		meanTheta /= 3.0;
+		// TODO remenber that sometimes you should multiply theta by -1 
+
+		it->phi = meanPhi;
+		it->theta = meanTheta;
+	}
 }
 
 void Sphereprint (std::list<Spherepoint>& points) {
@@ -137,7 +171,7 @@ int main() {
 	print(points);
 
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(0,-1.4);
+	Spherepoint * obj1= new Spherepoint(0,0.4);
 	Spherepoint * obj2= new Spherepoint(0,0.25);
 	Spherepoint * obj3= new Spherepoint(0,0.26);
 	Spherepoint * obj4= new Spherepoint(0,0.44);
