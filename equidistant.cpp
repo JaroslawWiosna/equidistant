@@ -24,6 +24,8 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
+
+float PI = 3.14; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
  
 template <typename T>
 void print (std::list<T>& points) {
@@ -151,12 +153,20 @@ void fun4 (std::list<Spherepoint>& points) {
 		meanPhi = closest0->phi + closest1->phi + closest2->phi + closest3->phi - it->phi;
 		meanPhi /= 3.0;
 		// TODO remenber that sometimes you should add PI to phi,then modulo 2PI  
+		if (abs(it->phi - meanPhi) < abs(it->phi - ((meanPhi+PI) % 2.0f*PI))) {
+			it->phi = meanPhi;
+		} else {
+			it->phi = ((meanPhi+PI) % 2.0f*PI);
+		}
 		meanTheta = closest0->theta + closest1->theta + closest2->theta + closest3->theta - it->theta;
 		meanTheta /= 3.0;
 		// TODO remenber that sometimes you should multiply theta by -1 
+		if (abs(it->theta - meanTheta) < abs(it->theta - ( (-1) * meanTheta))) {
+			it->theta = meanTheta;
+		} else {
+			it->theta = ( (-1) * meanTheta);
+		}
 
-		it->phi = meanPhi;
-		it->theta = meanTheta;
 		it->setCoord();
 	}
 }
