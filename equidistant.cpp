@@ -118,6 +118,7 @@ void fun4 (std::list<Spherepoint>& points) {
 
 	float * distance = new float[size];
 	float meanTheta{}, meanPhi;
+	std::size_t min[4];
 
 	for (std::size_t i = 0; i < size; ++i) {
 		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
@@ -129,6 +130,17 @@ void fun4 (std::list<Spherepoint>& points) {
 		// let's find 3 the closest points to it
 		// TODO !!!
 		// let's 'hardcode' it for a while. our points are j=2,j=3,j=4
+
+		/* ????
+		min[0] = 0; // because the closest point is itself, thus we need 4 the closest, then 'remove' the closest one(itself) from the list
+		for (std::size_t k = 0; k < 4; ++k) {
+			for (std::size_t i = 0; i < size; ++i) {
+				if (distance[i] < min[0])
+					min[k] = i;
+			}
+		}
+		*/	
+	
 		closest1 = std::next(points.begin(), 2);
 		closest2 = std::next(points.begin(), 3);
 		closest3 = std::next(points.begin(), 4);
@@ -143,6 +155,7 @@ void fun4 (std::list<Spherepoint>& points) {
 
 		it->phi = meanPhi;
 		it->theta = meanTheta;
+		it->setCoord();
 	}
 }
 
