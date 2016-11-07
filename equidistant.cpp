@@ -58,18 +58,48 @@ void fun2 (std::list<T>& points) {
 */
 }
 
-class Sphere{
+class Spherepoint{
+	public:
 	float theta, phi;
 	float x,y,z;
-	public:
 	void setCoord();	
+	Spherepoint(float THETA = 0, float PHI = 0) : theta(THETA), phi(PHI) {} 
 };
 
-void Sphere::setCoord () {
+void Spherepoint::setCoord () {
 	x = cos(theta) * cos(phi);
 	y = cos(theta) * sin(phi);
 	z = sin(theta);
 }
+
+
+
+void fun3 (std::list<Spherepoint>& points) {
+	std::size_t size = points.size();
+	for (std::size_t i = 1; i < size-1; ++i) {
+		float tmp;
+		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
+		std::list<Spherepoint>::iterator prev = std::next(it, -1);
+		std::list<Spherepoint>::iterator next = std::next(it, 1);
+//		tmp = ((*prev).phi + (*next).phi) / 2.0;
+		if (std::abs(it->phi - prev->phi) < std::abs(it->phi - next->phi)) {
+			it->phi += FLT_MIN;
+		} else {
+			it->phi -= FLT_MIN;
+		}
+	}
+}
+
+void Sphereprint (std::list<Spherepoint>& points) {
+	std::size_t size = points.size();
+	for (std::size_t i = 1; i < size; ++i) {
+		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
+		std::cout << it->phi << " \t";	
+	}
+	std::cout << std::endl;
+	
+}
+
 
 
 int main() {
@@ -84,6 +114,17 @@ int main() {
 	}
 	print(points);
 
-	Sphere * test= new Sphere();
+	Spherepoint * test= new Spherepoint();
+	Spherepoint * obj1= new Spherepoint(0,0.1);
+	Spherepoint * obj2= new Spherepoint(0,0.25);
+	Spherepoint * obj3= new Spherepoint(0,0.26);
+	Spherepoint * obj4= new Spherepoint(0,0.44);
+	Spherepoint * obj5= new Spherepoint(0,0.5);
 
+	std::list<Spherepoint> Spoints = {(0,0.1),(0.25),(0,0.26),(0,0.44),(0,0.5)};
+	for (std::size_t i = 1; i < 3; ++i) {
+		fun3(Spoints);
+		Sphereprint(Spoints);
+	}
+	Sphereprint(Spoints);
 }
