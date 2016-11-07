@@ -184,13 +184,12 @@ int main() {
 	print(points);
 
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(0,0.4);
+	Spherepoint * obj1= new Spherepoint(0,-1);
 	Spherepoint * obj2= new Spherepoint(0,0.25);
 	Spherepoint * obj3= new Spherepoint(0,0.26);
-	Spherepoint * obj4= new Spherepoint(0,0.44);
-	Spherepoint * obj5= new Spherepoint(0,1.5);
+	Spherepoint * obj4= new Spherepoint(0,1.44);
 
-	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4, *obj5};
+	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4};
 	
 	Sphereprint(Spoints);
 	for (std::size_t i = 1; i < 3000; ++i) {
@@ -199,17 +198,17 @@ int main() {
 	Sphereprint(Spoints);
 
 	std::list<Spherepoint>::iterator it = std::next(Spoints.begin(), 0);
-	for (std::size_t i = 0; i < 5; ++i) {
+	for (std::size_t i = 0; i < 4; ++i) {
 		it = std::next(Spoints.begin(), i);
 		std::cout << i <<".--\t" << it->x << " " << it->y << " " << it->z << " " << it->theta    << " " << it->phi << std::endl; 
 	}
 
-	for (std::size_t i = 0; i < 5; ++i) {
+	for (std::size_t i = 0; i < 4; ++i) {
 		it = std::next(Spoints.begin(), i);
 		it->setCoord();
 	}
 
-	for (std::size_t i = 0; i < 5; ++i) {
+	for (std::size_t i = 0; i < 4; ++i) {
 		it = std::next(Spoints.begin(), i);
 		std::cout << i <<".--\t" << it->x << " " << it->y << " " << it->z << " " << it->theta    << " " << it->phi << std::endl; 
 	}
@@ -221,7 +220,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource1 = 
     vtkSmartPointer<vtkSphereSource>::New();
   sphereSource1->SetCenter(0.0, 0.0, 0.0);
-  sphereSource1->SetRadius(1.0);
+  sphereSource1->SetRadius(0.5);
   sphereSource1->Update();
  
   vtkSmartPointer<vtkPolyDataMapper> mapper1 = 
@@ -300,23 +299,6 @@ int main() {
     vtkSmartPointer<vtkActor>::New();
   actor5->SetMapper(mapper5);
   
-   // Sphere 6
-  vtkSmartPointer<vtkSphereSource> sphereSource6 = 
-    vtkSmartPointer<vtkSphereSource>::New();
-  it = std::next(Spoints.begin(), 4);
-  sphereSource6->SetCenter(it->x, it->y, it->z);
-  sphereSource6->SetRadius(0.1);
- 
-  // Create a mapper
-  vtkSmartPointer<vtkPolyDataMapper> mapper6 = 
-    vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper6->SetInputConnection(sphereSource6->GetOutputPort());
- 
-  // Create an actor
-  vtkSmartPointer<vtkActor> actor6 = 
-    vtkSmartPointer<vtkActor>::New();
-  actor6->SetMapper(mapper6);
- 
   // A renderer and render window
   vtkSmartPointer<vtkRenderer> renderer = 
     vtkSmartPointer<vtkRenderer>::New();
@@ -330,12 +312,11 @@ int main() {
   renderWindowInteractor->SetRenderWindow(renderWindow);
  
   // Add the actors to the scene
-//  renderer->AddActor(actor1);
+  renderer->AddActor(actor1);
   renderer->AddActor(actor2);
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
   renderer->AddActor(actor5);
-  renderer->AddActor(actor6);
   renderer->SetBackground(1,1,0); // Background color yellow
  
   // Render
