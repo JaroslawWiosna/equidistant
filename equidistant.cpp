@@ -121,8 +121,11 @@ int main() {
 	Spherepoint * obj4= new Spherepoint(0,0.44);
 	Spherepoint * obj5= new Spherepoint(0,0.5);
 
-	std::list<Spherepoint> Spoints = {(0,0.1),(0.25),(0,0.26),(0,0.44),(0,0.5)};
-	for (std::size_t i = 1; i < 3; ++i) {
+//	std::list<Spherepoint> Spoints = {(0.1,0.1),(0.25,0.25),(0.26,0.26),(0.44,0.44),(0.5,0.5)};
+	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4, *obj5};
+	
+	Sphereprint(Spoints);
+	for (std::size_t i = 1; i < 400000; ++i) {
 		fun3(Spoints);
 		Sphereprint(Spoints);
 	}
