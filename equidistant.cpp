@@ -153,10 +153,10 @@ void fun4 (std::list<Spherepoint>& points) {
 		meanPhi = closest0->phi + closest1->phi + closest2->phi + closest3->phi - it->phi;
 		meanPhi /= 3.0;
 		// TODO remenber that sometimes you should add PI to phi,then modulo 2PI  
-		if (abs(it->phi - meanPhi) < abs(it->phi - ((meanPhi+PI) % 2.0f*PI))) {
+		if (abs(it->phi - meanPhi) < abs(it->phi - (meanPhi+PI))) {
 			it->phi = meanPhi;
 		} else {
-			it->phi = ((meanPhi+PI) % 2.0f*PI);
+			it->phi = meanPhi+PI;
 		}
 		meanTheta = closest0->theta + closest1->theta + closest2->theta + closest3->theta - it->theta;
 		meanTheta /= 3.0;
