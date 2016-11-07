@@ -10,7 +10,7 @@ project (equidistant)
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 find_package(Gtest)
-add_executable(equidistant MACOSX_BUNDLE ./equidistant.cpp) 
+add_executable(equidistant MACOSX_BUNDLE equidistant.cpp) 
 target_link_libraries(equidistant gtest pthread)
  
 if(VTK_LIBRARIES)
