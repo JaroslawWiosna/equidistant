@@ -87,7 +87,9 @@ class Spherepoint{
 	float phi, theta;
 	float x,y,z;
 	void setCoord();	
-	Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {} 
+	Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {
+		this->setCoord();
+	} 
 };
 
 void Spherepoint::setCoord () {
@@ -196,15 +198,15 @@ int main() {
 	print(points);
 
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(0.11,-1);
-	Spherepoint * obj2= new Spherepoint(0.2,0.25);
-	Spherepoint * obj3= new Spherepoint(1.3,0.26);
-	Spherepoint * obj4= new Spherepoint(1.66,1.44);
+	Spherepoint * obj1= new Spherepoint(2.0*PI/3.0,0);
+	Spherepoint * obj2= new Spherepoint(4.0*PI/3.0,0);
+	Spherepoint * obj3= new Spherepoint(0,PI/3.0);
+	Spherepoint * obj4= new Spherepoint(0,(-1)*PI/3.0);
 
 	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4};
 	
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 2002; ++i) {
+	for (std::size_t i = 1; i < 1; ++i) {
 		fun4(Spoints);
 	}
 	Sphereprint(Spoints);
@@ -232,7 +234,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource1 = 
     vtkSmartPointer<vtkSphereSource>::New();
   sphereSource1->SetCenter(0.0, 0.0, 0.0);
-  sphereSource1->SetRadius(0.5);
+  sphereSource1->SetRadius(1.0);
   sphereSource1->Update();
  
   vtkSmartPointer<vtkPolyDataMapper> mapper1 = 
@@ -347,6 +349,12 @@ int main() {
   stlWriter->SetFileName("object_test.stl");
   stlWriter->SetInputConnection(sphereSource5->GetOutputPort());
   stlWriter->Write();
+
+	free(obj1);
+	free(obj2);
+	free(obj3);
+	free(obj4);
+
 
   return EXIT_SUCCESS;
 
