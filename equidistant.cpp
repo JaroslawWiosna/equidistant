@@ -103,22 +103,18 @@ void fun4 (std::list<Spherepoint*>& points) {
 	std::list<Spherepoint*>::iterator closest0, closest1, closest2, closest3;
 	std::size_t size = points.size();
 
-	//float * distance = new float[size];
 	std::vector < std::pair<std::size_t , float>> distance;
 	std::pair<std::size_t , float> tmp_pair;
 	float meanTheta{}, meanPhi;
 	std::size_t min[4];
 	std::list<Spherepoint*>::iterator it, jt;
-	constexpr float eps = 10.1;
+	constexpr float eps = 0.1;
 
 	for (std::size_t i = 0; i < size; ++i) {
 		it = std::next(points.begin(), i);
 		for (std::size_t j = 0; j < size; ++j) {
 			jt = std::next(points.begin(), j);
 			// distance[j] is distance between it and 'j'
-	//		tmp_pair.first = j;
-	//		tmp_pair.second = sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) );
-	//		distance.push_back(tmp_pair);
 			tmp_pair.first = j;
 			tmp_pair.second = sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) );
 			distance.push_back(std::make_pair(j,sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) ))); // think about emplace_back
@@ -175,33 +171,52 @@ void fun4 (std::list<Spherepoint*>& points) {
 		Spherepoint * itUp    = new Spherepoint((*it)->phi           , (*it)->theta + 0.001);
 		Spherepoint * itDown  = new Spherepoint((*it)->phi           , (*it)->theta - 0.001);
 
-		if (sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+		if ((sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
 			- sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
-			< eps) {
-			if (sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
-				 < 
-				sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			< eps) 
+			&&
+			(sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+			- sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
+			)) {
+			if (sqrt( pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->z - (*closest1)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+				 > 
+				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
+				+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+				+ sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
 				) {
 					(*it)->phi -= 0.001;
 					std::cout << " i=" << i << " new=LEFT" << std::endl;
-			} else if (sqrt( pow(itRight->x - (*closest3)->x,2) + pow(itRight->x - (*closest3)->x,2) + pow(itRight->z - (*closest3)->z,2)) 
-				 < 
-				sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			} else if (sqrt( pow(itRight->x - (*closest1)->x,2) + pow(itRight->x - (*closest1)->x,2) + pow(itRight->z - (*closest1)->z,2)) 
+				+ sqrt( pow(itRight->x - (*closest2)->x,2) + pow(itRight->x - (*closest2)->x,2) + pow(itRight->z - (*closest2)->z,2)) 
+				+ sqrt( pow(itRight->x - (*closest3)->x,2) + pow(itRight->x - (*closest3)->x,2) + pow(itRight->z - (*closest3)->z,2)) 
+				 > 
+				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
 				) {
 					(*it)->phi += 0.001;
 					std::cout << " i=" << i << " new=RIGHT" << std::endl;
 			}
 	
 			//The following if-else-clause is for theta movement 
-			if (sqrt( pow(itUp->x - (*closest3)->x,2) + pow(itUp->x - (*closest3)->x,2) + pow(itUp->z - (*closest3)->z,2))
-				 < 
-				sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			if (sqrt( pow(itUp->x - (*closest1)->x,2) + pow(itUp->x - (*closest1)->x,2) + pow(itUp->z - (*closest1)->z,2))
+				+ sqrt( pow(itUp->x - (*closest1)->x,2) + pow(itUp->x - (*closest1)->x,2) + pow(itUp->z - (*closest1)->z,2))
+				 > 
+				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
 				) {
 					(*it)->theta += 0.001;
 					std::cout << " i=" << i << " new=UP" << std::endl;
-			} else if (sqrt( pow(itDown->x - (*closest3)->x,2) + pow(itDown->x - (*closest3)->x,2) + pow(itDown->z - (*closest3)->z,2))
-				 < 
-				sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			} else if (sqrt( pow(itDown->x - (*closest1)->x,2) + pow(itDown->x - (*closest1)->x,2) + pow(itDown->z - (*closest1)->z,2))
+				+ sqrt( pow(itDown->x - (*closest2)->x,2) + pow(itDown->x - (*closest2)->x,2) + pow(itDown->z - (*closest2)->z,2))
+				+ sqrt( pow(itDown->x - (*closest3)->x,2) + pow(itDown->x - (*closest3)->x,2) + pow(itDown->z - (*closest3)->z,2))
+				 > 
+				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
+				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
 				) {
 					(*it)->theta -= 0.001;
 					std::cout << " i=" << i << " new=DOWN" << std::endl;
@@ -230,21 +245,21 @@ void Sphereprint (std::list<Spherepoint*>& points) {
 
 int main() {
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(0.2,-0.51);
-	Spherepoint * obj2= new Spherepoint(1.3,-0.24);
-	Spherepoint * obj3= new Spherepoint(3.4,0.25);
-	Spherepoint * obj4= new Spherepoint(4.5,0.5);
-	Spherepoint * obj5= new Spherepoint(0.8,(-1.3)*PI/3.0);
-	Spherepoint * obj6= new Spherepoint(0.2,(-1)*PI/3.0);
+	Spherepoint * obj1= new Spherepoint(1,0.7);
+	Spherepoint * obj2= new Spherepoint(3,0.1);
+	Spherepoint * obj3= new Spherepoint(4,0.1);
+	Spherepoint * obj4= new Spherepoint(0.1,-1);
+	Spherepoint * obj5= new Spherepoint(0,0);
+	Spherepoint * obj6= new Spherepoint(0,0);
 
-	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4, obj5, obj6 };
+	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4 };
 
 	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 2; ++i) {
+	for (std::size_t i = 1; i < 200000; ++i) {
 		fun4(Spoints);
-		std::cout << i/200.0 << " %       \r"; 
+		std::cout << i/2000.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
@@ -337,7 +352,7 @@ int main() {
   vtkSmartPointer<vtkActor> actor5 = 
     vtkSmartPointer<vtkActor>::New();
   actor5->SetMapper(mapper5);
-  
+ /* 
    // Sphere 6
   vtkSmartPointer<vtkSphereSource> sphereSource6 = 
     vtkSmartPointer<vtkSphereSource>::New();
@@ -372,7 +387,7 @@ int main() {
   vtkSmartPointer<vtkActor> actor7 = 
     vtkSmartPointer<vtkActor>::New();
   actor7->SetMapper(mapper7);
-  
+*/  
   // A renderer and render window
   vtkSmartPointer<vtkRenderer> renderer = 
     vtkSmartPointer<vtkRenderer>::New();
@@ -391,8 +406,8 @@ int main() {
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
   renderer->AddActor(actor5);
-  renderer->AddActor(actor6);
-  renderer->AddActor(actor7);
+//  renderer->AddActor(actor6);
+//  renderer->AddActor(actor7);
   renderer->SetBackground(1,1,0); // Background color yellow
  
   // Render
