@@ -98,38 +98,22 @@ void Spherepoint::setCoord () {
 	this->z = sin(theta);
 }
 
-
-
-void fun3 (std::list<Spherepoint>& points) {
-	std::size_t size = points.size();
-	for (std::size_t i = 1; i < size-1; ++i) {
-		float tmp;
-		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
-		std::list<Spherepoint>::iterator prev = std::next(it, -1);
-		std::list<Spherepoint>::iterator next = std::next(it, 1);
-		it->phi = ((*prev).phi + (*next).phi) / 2.0;
-/*		if (std::abs(it->phi - prev->phi) < std::abs(it->phi - next->phi)) {
-			it->phi += FLT_MIN;
-		} else {
-			it->phi -= FLT_MIN;
-		}
-*/	}
-}
-
-void fun4 (std::list<Spherepoint>& points) {
-	std::list<Spherepoint>::iterator closest0, closest1, closest2, closest3;
+void fun4 (std::list<Spherepoint*>& points) {
+	std::list<Spherepoint*>::iterator closest0, closest1, closest2, closest3;
 	std::size_t size = points.size();
 
 	float * distance = new float[size];
 	float meanTheta{}, meanPhi;
 	std::size_t min[4];
+	std::list<Spherepoint*>::iterator it, jt;
 
 	for (std::size_t i = 0; i < size; ++i) {
-		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
+		it = std::next(points.begin(), i);
 		for (std::size_t j = 0; j < size; ++j) {
-			std::list<Spherepoint>::iterator jt = std::next(points.begin(), j);
+			jt = std::next(points.begin(), j);
 			// distance[j] is distance between it and 'j'
-			distance[j] = sqrt( (it->x - jt->x)*(it->x - jt->x) + (it->x - jt->x)*(it->y - jt->y) + (it->z - jt->z)*(it->z - jt->z) );
+			//distance[j] = sqrt( (it->x - jt->x)*(it->x - jt->x) + (it->x - jt->x)*(it->y - jt->y) + (it->z - jt->z)*(it->z - jt->z) );
+			distance[j] = sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) );
 		}
 		// let's find 3 the closest points to it
 		// TODO Rewrite it...
@@ -173,54 +157,54 @@ void fun4 (std::list<Spherepoint>& points) {
 		//now we know what are the 3 closest points
 		//lets make one step left, one right and check which is better
 
-		Spherepoint * itLeft  = new Spherepoint(it->phi - 10000 * FLT_MIN , it->theta);
-		Spherepoint * itRight = new Spherepoint(it->phi + 10000 * FLT_MIN , it->theta);
+		Spherepoint * itLeft  = new Spherepoint((*it)->phi - 10000000 * FLT_MIN , (*it)->theta);
+		Spherepoint * itRight = new Spherepoint((*it)->phi + 10000000 * FLT_MIN , (*it)->theta);
 		// the following two lines will be needed! but now, let's try move only phi...
-		Spherepoint * itUp    = new Spherepoint(it->phi           , it->theta + 10000 * FLT_MIN);
-		Spherepoint * itDown  = new Spherepoint(it->phi           , it->theta - 10000 * FLT_MIN);
+		Spherepoint * itUp    = new Spherepoint((*it)->phi           , (*it)->theta + 10000000 * FLT_MIN);
+		Spherepoint * itDown  = new Spherepoint((*it)->phi           , (*it)->theta - 10000000 * FLT_MIN);
 
-		if (sqrt( pow(itLeft->x - closest3->x,2) + pow(itLeft->x - closest3->x,2) + pow(itLeft->z - closest3->z,2))
-			+ sqrt( pow(itLeft->x - closest2->x,2) + pow(itLeft->x - closest2->x,2) + pow(itLeft->z - closest2->z,2))
-			+ sqrt( pow(itLeft->x - closest1->x,2) + pow(itLeft->x - closest1->x,2) + pow(itLeft->z - closest1->z,2))
+		if (sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+			+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
+			+ sqrt( pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->z - (*closest1)->z,2))
 			 < 
-			sqrt( pow(it->x - closest3->x,2) + pow(it->x - closest3->x,2) + pow(it->z - closest3->z,2))
-			+ sqrt( pow(it->x - closest2->x,2) + pow(it->x - closest2->x,2) + pow(it->z - closest2->z,2))
-			+ sqrt( pow(it->x - closest1->x,2) + pow(it->x - closest1->x,2) + pow(it->z - closest1->z,2))
+			sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				it->phi -= 10000 * FLT_MIN;
-		} else if (sqrt( pow(itRight->x - closest3->x,2) + pow(itRight->x - closest3->x,2) + pow(itRight->z - closest3->z,2)) 
-			+ sqrt( pow(itRight->x - closest2->x,2) + pow(itRight->x - closest2->x,2) + pow(itRight->z - closest2->z,2)) 
-			+ sqrt( pow(itRight->x - closest1->x,2) + pow(itRight->x - closest1->x,2) + pow(itRight->z - closest1->z,2)) 
+				(*it)->phi -= 10000000 * FLT_MIN;
+		} else if (sqrt( pow(itRight->x - (*closest3)->x,2) + pow(itRight->x - (*closest3)->x,2) + pow(itRight->z - (*closest3)->z,2)) 
+			+ sqrt( pow(itRight->x - (*closest2)->x,2) + pow(itRight->x - (*closest2)->x,2) + pow(itRight->z - (*closest2)->z,2)) 
+			+ sqrt( pow(itRight->x - (*closest1)->x,2) + pow(itRight->x - (*closest1)->x,2) + pow(itRight->z - (*closest1)->z,2)) 
 			 < 
-			sqrt( pow(it->x - closest3->x,2) + pow(it->x - closest3->x,2) + pow(it->z - closest3->z,2))
-			+ sqrt( pow(it->x - closest2->x,2) + pow(it->x - closest2->x,2) + pow(it->z - closest2->z,2))
-			+ sqrt( pow(it->x - closest1->x,2) + pow(it->x - closest1->x,2) + pow(it->z - closest1->z,2))
+			sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				it->phi += 10000 * FLT_MIN;
+				(*it)->phi += 10000000 * FLT_MIN;
 		}
 
 		//The following if-else-clause is for theta movement 
-		if (sqrt( pow(itUp->x - closest3->x,2) + pow(itUp->x - closest3->x,2) + pow(itUp->z - closest3->z,2))
-			+ sqrt( pow(itUp->x - closest2->x,2) + pow(itUp->x - closest2->x,2) + pow(itUp->z - closest2->z,2))
-			+ sqrt( pow(itUp->x - closest1->x,2) + pow(itUp->x - closest1->x,2) + pow(itUp->z - closest1->z,2))
+		if (sqrt( pow(itUp->x - (*closest3)->x,2) + pow(itUp->x - (*closest3)->x,2) + pow(itUp->z - (*closest3)->z,2))
+			+ sqrt( pow(itUp->x - (*closest2)->x,2) + pow(itUp->x - (*closest2)->x,2) + pow(itUp->z - (*closest2)->z,2))
+			+ sqrt( pow(itUp->x - (*closest1)->x,2) + pow(itUp->x - (*closest1)->x,2) + pow(itUp->z - (*closest1)->z,2))
 			 < 
-			sqrt( pow(it->x - closest3->x,2) + pow(it->x - closest3->x,2) + pow(it->z - closest3->z,2))
-			+ sqrt( pow(it->x - closest2->x,2) + pow(it->x - closest2->x,2) + pow(it->z - closest2->z,2))
-			+ sqrt( pow(it->x - closest1->x,2) + pow(it->x - closest1->x,2) + pow(it->z - closest1->z,2))
+			sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				it->theta += 10000 * FLT_MIN;
-		} else if (sqrt( pow(itDown->x - closest3->x,2) + pow(itDown->x - closest3->x,2) + pow(itDown->z - closest3->z,2))
-			+ sqrt( pow(itDown->x - closest2->x,2) + pow(itDown->x - closest2->x,2) + pow(itDown->z - closest2->z,2))
-			+ sqrt( pow(itDown->x - closest1->x,2) + pow(itDown->x - closest1->x,2) + pow(itDown->z - closest1->z,2))
+				(*it)->theta += 10000000 * FLT_MIN;
+		} else if (sqrt( pow(itDown->x - (*closest3)->x,2) + pow(itDown->x - (*closest3)->x,2) + pow(itDown->z - (*closest3)->z,2))
+			+ sqrt( pow(itDown->x - (*closest2)->x,2) + pow(itDown->x - (*closest2)->x,2) + pow(itDown->z - (*closest2)->z,2))
+			+ sqrt( pow(itDown->x - (*closest1)->x,2) + pow(itDown->x - (*closest1)->x,2) + pow(itDown->z - (*closest1)->z,2))
 			 < 
-			sqrt( pow(it->x - closest3->x,2) + pow(it->x - closest3->x,2) + pow(it->z - closest3->z,2))
-			+ sqrt( pow(it->x - closest2->x,2) + pow(it->x - closest2->x,2) + pow(it->z - closest2->z,2))
-			+ sqrt( pow(it->x - closest1->x,2) + pow(it->x - closest1->x,2) + pow(it->z - closest1->z,2))
+			sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				it->theta -= 10000 * FLT_MIN;
+				(*it)->theta -= 10000000 * FLT_MIN;
 		}
 	
-		it->setCoord();
+		(*it)->setCoord();
 
 		free(itLeft);
 		free(itRight);
@@ -229,11 +213,11 @@ void fun4 (std::list<Spherepoint>& points) {
 	}
 }
 
-void Sphereprint (std::list<Spherepoint>& points) {
+void Sphereprint (std::list<Spherepoint*>& points) {
 	std::size_t size = points.size();
 	for (std::size_t i = 0; i < size; ++i) {
-		std::list<Spherepoint>::iterator it = std::next(points.begin(), i);
-		std::cout << it->phi << " \t";	
+		std::list<Spherepoint*>::iterator it = std::next(points.begin(), i);
+		std::cout << (*it)->phi << " \t";	
 	}
 	std::cout << std::endl;
 	
@@ -254,36 +238,40 @@ int main() {
 	print(points);
 
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(2.0*PI/3.0,0.2);
+	Spherepoint * obj1= new Spherepoint(2.0*PI/3.0,0.6);
 	Spherepoint * obj2= new Spherepoint(1.8*PI/3.0,0.24);
-	Spherepoint * obj3= new Spherepoint(0,PI/3.0);
-	Spherepoint * obj4= new Spherepoint(1,(-1)*PI/3.0);
+	Spherepoint * obj3= new Spherepoint(0.1,PI/3.0);
+	Spherepoint * obj4= new Spherepoint(1.5,(-1.6)*PI/3.0);
+	Spherepoint * obj5= new Spherepoint(0.8,(-1.3)*PI/3.0);
+	Spherepoint * obj6= new Spherepoint(0.2,(-1)*PI/3.0);
 
-	std::list<Spherepoint> Spoints = {*obj1, *obj2, *obj3, *obj4};
-	
+	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4, obj5, obj6};
+
+	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
+
+	for (std::size_t i = 0; i < 4; ++i) {
+		it = std::next(Spoints.begin(), i);
+		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
+	}
+	obj1->phi = 1.0;
+	for (std::size_t i = 0; i < 4; ++i) {
+		it = std::next(Spoints.begin(), i);
+		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
+	}
+
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 600000; ++i) {
+	for (std::size_t i = 1; i < 9000000; ++i) {
 		fun4(Spoints);
-		std::cout << i/600000.0 << " %\r"; 
+		std::cout << i/90000.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
 	Sphereprint(Spoints);
 
-	std::list<Spherepoint>::iterator it = std::next(Spoints.begin(), 0);
+	it = std::next(Spoints.begin(), 0);
 	for (std::size_t i = 0; i < 4; ++i) {
 		it = std::next(Spoints.begin(), i);
-		std::cout << i <<".--\t" << it->x << " " << it->y << " " << it->z << " " << it->theta    << " " << it->phi << std::endl; 
-	}
-
-	for (std::size_t i = 0; i < 4; ++i) {
-		it = std::next(Spoints.begin(), i);
-		it->setCoord();
-	}
-
-	for (std::size_t i = 0; i < 4; ++i) {
-		it = std::next(Spoints.begin(), i);
-		std::cout << i <<".--\t" << it->x << " " << it->y << " " << it->z << " " << it->theta    << " " << it->phi << std::endl; 
+		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
 	}
 		
 	//std::list<Spherepoint>::iterator it = std::next(Spoints.begin(), 0);
@@ -308,7 +296,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource2 = 
     vtkSmartPointer<vtkSphereSource>::New();
   it = std::next(Spoints.begin(), 0);
-  sphereSource2->SetCenter(it->x, it->y, it->z);
+  sphereSource2->SetCenter((*it)->x, (*it)->y, (*it)->z);
   sphereSource2->SetRadius(0.1);
  
   // Create a mapper
@@ -325,7 +313,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource3 = 
     vtkSmartPointer<vtkSphereSource>::New();
   it = std::next(Spoints.begin(), 1);
-  sphereSource3->SetCenter(it->x, it->y, it->z);
+  sphereSource3->SetCenter((*it)->x, (*it)->y, (*it)->z);
   sphereSource3->SetRadius(0.1);
  
   // Create a mapper
@@ -342,7 +330,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource4 = 
     vtkSmartPointer<vtkSphereSource>::New();
   it = std::next(Spoints.begin(), 2);
-  sphereSource4->SetCenter(it->x, it->y, it->z);
+  sphereSource4->SetCenter((*it)->x, (*it)->y, (*it)->z);
   sphereSource4->SetRadius(0.1);
  
   // Create a mapper
@@ -359,7 +347,7 @@ int main() {
   vtkSmartPointer<vtkSphereSource> sphereSource5 = 
     vtkSmartPointer<vtkSphereSource>::New();
   it = std::next(Spoints.begin(), 3);
-  sphereSource4->SetCenter(it->x, it->y, it->z);
+  sphereSource5->SetCenter((*it)->x, (*it)->y, (*it)->z);
   sphereSource5->SetRadius(0.1);
  
   // Create a mapper
@@ -371,6 +359,42 @@ int main() {
   vtkSmartPointer<vtkActor> actor5 = 
     vtkSmartPointer<vtkActor>::New();
   actor5->SetMapper(mapper5);
+  
+ 
+  // Sphere 6
+  vtkSmartPointer<vtkSphereSource> sphereSource6 = 
+    vtkSmartPointer<vtkSphereSource>::New();
+  it = std::next(Spoints.begin(), 4);
+  sphereSource6->SetCenter((*it)->x, (*it)->y, (*it)->z);
+  sphereSource6->SetRadius(0.1);
+ 
+  // Create a mapper
+  vtkSmartPointer<vtkPolyDataMapper> mapper6 = 
+    vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper6->SetInputConnection(sphereSource6->GetOutputPort());
+ 
+  // Create an actor
+  vtkSmartPointer<vtkActor> actor6 = 
+    vtkSmartPointer<vtkActor>::New();
+  actor6->SetMapper(mapper6);
+  
+ 
+  // Sphere 7
+  vtkSmartPointer<vtkSphereSource> sphereSource7 = 
+    vtkSmartPointer<vtkSphereSource>::New();
+  it = std::next(Spoints.begin(), 5);
+  sphereSource7->SetCenter((*it)->x, (*it)->y, (*it)->z);
+  sphereSource7->SetRadius(0.1);
+ 
+  // Create a mapper
+  vtkSmartPointer<vtkPolyDataMapper> mapper7 = 
+    vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper7->SetInputConnection(sphereSource7->GetOutputPort());
+ 
+  // Create an actor
+  vtkSmartPointer<vtkActor> actor7 = 
+    vtkSmartPointer<vtkActor>::New();
+  actor7->SetMapper(mapper7);
   
   // A renderer and render window
   vtkSmartPointer<vtkRenderer> renderer = 
@@ -385,11 +409,13 @@ int main() {
   renderWindowInteractor->SetRenderWindow(renderWindow);
  
   // Add the actors to the scene
-//  renderer->AddActor(actor1);
+  renderer->AddActor(actor1);
   renderer->AddActor(actor2);
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
   renderer->AddActor(actor5);
+  renderer->AddActor(actor6);
+  renderer->AddActor(actor7);
   renderer->SetBackground(1,1,0); // Background color yellow
  
   // Render
