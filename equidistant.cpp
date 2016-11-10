@@ -220,7 +220,7 @@ void Sphereprint (std::list<Spherepoint*>& points) {
 	std::size_t size = points.size();
 	for (std::size_t i = 0; i < size; ++i) {
 		std::list<Spherepoint*>::iterator it = std::next(points.begin(), i);
-		std::cout << (*it)->phi << " \t";	
+		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
 	}
 	std::cout << std::endl;
 	
@@ -229,49 +229,28 @@ void Sphereprint (std::list<Spherepoint*>& points) {
 
 
 int main() {
-	std::list<float> points = {0,0.11,0.14442,0.3,1.0};
-
-	print(points);
-	fun2(points);
-	print(points);
-	for (std::size_t i = 1; i < 30000; ++i) {
-		fun2(points);
-	//	print(points);
-	}
-	print(points);
-
 	Spherepoint * test= new Spherepoint();
-	Spherepoint * obj1= new Spherepoint(2.0*PI/3.0,0.6);
-	Spherepoint * obj2= new Spherepoint(1.8*PI/3.0,0.24);
-	Spherepoint * obj3= new Spherepoint(0.1,PI/3.0);
-	Spherepoint * obj4= new Spherepoint(1.5,(-1.6)*PI/3.0);
+	Spherepoint * obj1= new Spherepoint(0.2,-0.51);
+	Spherepoint * obj2= new Spherepoint(1.3,-0.24);
+	Spherepoint * obj3= new Spherepoint(3.4,0.25);
+	Spherepoint * obj4= new Spherepoint(4.5,0.5);
 	Spherepoint * obj5= new Spherepoint(0.8,(-1.3)*PI/3.0);
 	Spherepoint * obj6= new Spherepoint(0.2,(-1)*PI/3.0);
 
-	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4 };
+	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4, obj5, obj6 };
 
 	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
-	for (std::size_t i = 0; i < 4; ++i) {
-		it = std::next(Spoints.begin(), i);
-		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
-	}
-
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 200000; ++i) {
+	for (std::size_t i = 1; i < 2; ++i) {
 		fun4(Spoints);
-		std::cout << i/2000.0 << " %       \r"; 
+		std::cout << i/200.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
-	Sphereprint(Spoints);
 
 	std::cout << "After moving...\n" ;
-	it = std::next(Spoints.begin(), 0);
-	for (std::size_t i = 0; i < 4; ++i) {
-		it = std::next(Spoints.begin(), i);
-		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
-	}
+	Sphereprint(Spoints);
 		
 	//std::list<Spherepoint>::iterator it = std::next(Spoints.begin(), 0);
 	it = std::next(Spoints.begin(), 0);
@@ -359,8 +338,7 @@ int main() {
     vtkSmartPointer<vtkActor>::New();
   actor5->SetMapper(mapper5);
   
- /*
-  // Sphere 6
+   // Sphere 6
   vtkSmartPointer<vtkSphereSource> sphereSource6 = 
     vtkSmartPointer<vtkSphereSource>::New();
   it = std::next(Spoints.begin(), 4);
@@ -394,7 +372,7 @@ int main() {
   vtkSmartPointer<vtkActor> actor7 = 
     vtkSmartPointer<vtkActor>::New();
   actor7->SetMapper(mapper7);
-  */
+  
   // A renderer and render window
   vtkSmartPointer<vtkRenderer> renderer = 
     vtkSmartPointer<vtkRenderer>::New();
@@ -408,13 +386,13 @@ int main() {
   renderWindowInteractor->SetRenderWindow(renderWindow);
  
   // Add the actors to the scene
-  renderer->AddActor(actor1);
+//  renderer->AddActor(actor1);
   renderer->AddActor(actor2);
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
   renderer->AddActor(actor5);
-//  renderer->AddActor(actor6);
-//  renderer->AddActor(actor7);
+  renderer->AddActor(actor6);
+  renderer->AddActor(actor7);
   renderer->SetBackground(1,1,0); // Background color yellow
  
   // Render
