@@ -171,7 +171,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
 			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				(*it)->phi -= 10000000 * FLT_MIN;
+				(*it)->phi -= 10000000000 * FLT_MIN;
 		} else if (sqrt( pow(itRight->x - (*closest3)->x,2) + pow(itRight->x - (*closest3)->x,2) + pow(itRight->z - (*closest3)->z,2)) 
 			+ sqrt( pow(itRight->x - (*closest2)->x,2) + pow(itRight->x - (*closest2)->x,2) + pow(itRight->z - (*closest2)->z,2)) 
 			+ sqrt( pow(itRight->x - (*closest1)->x,2) + pow(itRight->x - (*closest1)->x,2) + pow(itRight->z - (*closest1)->z,2)) 
@@ -180,7 +180,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
 			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				(*it)->phi += 10000000 * FLT_MIN;
+				(*it)->phi += 10000000000 * FLT_MIN;
 		}
 
 		//The following if-else-clause is for theta movement 
@@ -192,7 +192,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
 			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				(*it)->theta += 10000000 * FLT_MIN;
+				(*it)->theta += 10000000000 * FLT_MIN;
 		} else if (sqrt( pow(itDown->x - (*closest3)->x,2) + pow(itDown->x - (*closest3)->x,2) + pow(itDown->z - (*closest3)->z,2))
 			+ sqrt( pow(itDown->x - (*closest2)->x,2) + pow(itDown->x - (*closest2)->x,2) + pow(itDown->z - (*closest2)->z,2))
 			+ sqrt( pow(itDown->x - (*closest1)->x,2) + pow(itDown->x - (*closest1)->x,2) + pow(itDown->z - (*closest1)->z,2))
@@ -201,7 +201,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 			+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
 			+ sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
 			) {
-				(*it)->theta -= 10000000 * FLT_MIN;
+				(*it)->theta -= 10000000000 * FLT_MIN;
 		}
 	
 		(*it)->setCoord();
@@ -245,7 +245,7 @@ int main() {
 	Spherepoint * obj5= new Spherepoint(0.8,(-1.3)*PI/3.0);
 	Spherepoint * obj6= new Spherepoint(0.2,(-1)*PI/3.0);
 
-	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4, obj5, obj6};
+	std::list<Spherepoint*> Spoints = {obj1, obj2, obj3, obj4};
 
 	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
@@ -260,14 +260,15 @@ int main() {
 	}
 
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 9000000; ++i) {
+	for (std::size_t i = 1; i < 59900000; ++i) {
 		fun4(Spoints);
-		std::cout << i/90000.0 << " %       \r"; 
+		std::cout << i/590900.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
 	Sphereprint(Spoints);
 
+	std::cout << "After moving...\n" ;
 	it = std::next(Spoints.begin(), 0);
 	for (std::size_t i = 0; i < 4; ++i) {
 		it = std::next(Spoints.begin(), i);
@@ -360,7 +361,7 @@ int main() {
     vtkSmartPointer<vtkActor>::New();
   actor5->SetMapper(mapper5);
   
- 
+/* 
   // Sphere 6
   vtkSmartPointer<vtkSphereSource> sphereSource6 = 
     vtkSmartPointer<vtkSphereSource>::New();
@@ -395,7 +396,7 @@ int main() {
   vtkSmartPointer<vtkActor> actor7 = 
     vtkSmartPointer<vtkActor>::New();
   actor7->SetMapper(mapper7);
-  
+  */
   // A renderer and render window
   vtkSmartPointer<vtkRenderer> renderer = 
     vtkSmartPointer<vtkRenderer>::New();
@@ -414,8 +415,8 @@ int main() {
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
   renderer->AddActor(actor5);
-  renderer->AddActor(actor6);
-  renderer->AddActor(actor7);
+//  renderer->AddActor(actor6);
+ // renderer->AddActor(actor7);
   renderer->SetBackground(1,1,0); // Background color yellow
  
   // Render
