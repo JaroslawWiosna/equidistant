@@ -1,3 +1,6 @@
+#ifndef SPHEREPOINT_HPP
+#define SPHEREPOINT_HPP
+
 #include<iostream>
 #include<list>
 #include<cfloat> // FLT_MIN
@@ -9,7 +12,8 @@ class Spherepoint{
 	float phi, theta;
 	float x,y,z;
 	void setCoord();	
-	float getDistanceTo(const Spherepoint* point); 
+	float getDistanceTo(Spherepoint* point); 
+	float getDistanceTo(Spherepoint& point); 
 	Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {
 		this->setCoord();
 	} 
@@ -21,8 +25,17 @@ void Spherepoint::setCoord () {
 	this->z = sin(theta);
 }
 
-float Spherepoint::getDistanceTo(const Spherepoint* point) {
+float Spherepoint::getDistanceTo(Spherepoint* point) {
 	return sqrt( pow(this->x - point->x,2) 
 		+ pow(this->x - point->x,2) 
 		+ pow(this->z - point->z,2));
 }
+
+float Spherepoint::getDistanceTo(Spherepoint& point) {
+	return sqrt( pow(this->x - point.x,2) 
+		+ pow(this->x - point.x,2) 
+		+ pow(this->z - point.z,2));
+}
+
+#endif // SPHEREPOINT_HPP
+

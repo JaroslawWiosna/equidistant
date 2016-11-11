@@ -29,61 +29,6 @@
 
 float PI = 3.14; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
  
-template <typename T>
-void print (std::list<T>& points) {
-	std::size_t size = points.size();
-	for (std::size_t i = 1; i < size; ++i) {
-		std::list<float>::iterator it = std::next(points.begin(), i);
-		std::cout << *it << " \t";	
-	}
-	std::cout << std::endl;
-	
-}
-
-template <typename T>
-void fun (std::list<T>& points) {
-	std::size_t size = points.size();
-	for (std::size_t i = 1; i < size; ++i) {
-		std::list<float>::iterator it = std::next(points.begin(), i);
-		std::list<float>::iterator prev = std::next(it, -1);
-		std::list<float>::iterator next = std::next(it, 1);
-		*it = (*prev + *next) / 2.0;
-
-		if (i == size-1) {
-			*it = (*prev + 1.0) / 2.0;
-		}
-	}
-	
-}
-
-
-template <typename T>
-void fun2 (std::list<T>& points) {
-	std::size_t size = points.size();
-	for (std::size_t i = 1; i < size-1; ++i) {
-		std::list<float>::iterator it = std::next(points.begin(), i);
-		std::list<float>::iterator prev = std::next(it, -1);
-		std::list<float>::iterator next = std::next(it, 1);
-		*it = (*prev + *next) / 2.0;
-		if (std::abs(*it - *prev) < std::abs(*it - *next)) {
-			*it += FLT_MIN;
-		} else {
-			*it -= FLT_MIN;
-		}
-	}
-/*
-	std::list<float>::iterator it = std::next(points.end(), -1);
-	std::list<float>::iterator prev = std::next(it, -1);
-	//std::list<float>::iterator next = std::next(it, 1);
-
-	if (std::abs(*it - *prev) < (1.0 - *it)) {
-		*it += FLT_MIN;
-	} else {
-		*it -= FLT_MIN;
-	}
-*/
-}
-
 void fun4 (std::list<Spherepoint*>& points) {
 	std::list<Spherepoint*>::iterator closest0, closest1, closest2, closest3;
 	std::size_t size = points.size();
@@ -100,43 +45,9 @@ void fun4 (std::list<Spherepoint*>& points) {
 		for (std::size_t j = 0; j < size; ++j) {
 			jt = std::next(points.begin(), j);
 			// distance[j] is distance between it and 'j'
-			tmp_pair.first = j;
-			tmp_pair.second = sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) );
-			distance.push_back(std::make_pair(j,sqrt(( ((*it)->x) - (*jt)->x)*((*it)->x - (*jt)->x) + ((*it)->x - (*jt)->x)*((*it)->y - (*jt)->y) + ((*it)->z - (*jt)->z)*((*it)->z - (*jt)->z) ))); // think about emplace_back
+			distance.push_back(std::make_pair(j,(*it)->getDistanceTo(*jt))); // think about emplace_back
 		}
 		// let's find 3 the closest points to it
-		// TODO Rewrite it...
-/*
-		int index1=0;
-		for (std::size_t k = 0; k < size; ++k) {
-			if (distance[k] < distance[index1])
-				index1 = k;
-		}
-		int index2=0;
-		while(index2 == index1) {
-			index2++;
-		}
-		for (std::size_t k = 0; k < size; ++k) {
-			if ((distance[k] < distance[index2]) && (index2 != index1))
-				index2 = k;
-		}
-		int index3=0;
-		while((index3 == index2) || (index3 == index1)) {
-			index3++;
-		}
-		for (std::size_t k = 0; k < size; ++k) {
-			if ((distance[k] < distance[index3]) && (index3 != index2) && (index3 != index1))
-				index3 = k;
-		}
-		int index4=0;
-		while((index4 == index3) || (index4 == index2) || (index4 == index1)) {
-			index4++;
-		}
-		for (std::size_t k = 0; k < size; ++k) {
-			if ((distance[k] < distance[index4]) && (index4 != index3) && (index4 != index2) && (index4 != index1))
-				index4 = k;
-		}
-*/			
 		auto cmp = [](std::pair<std::size_t,float> const & a, std::pair<std::size_t,float> const & b) 
 		{ 
 			     return a.second != b.second?  a.second < b.second : a.first < b.first;
@@ -156,52 +67,54 @@ void fun4 (std::list<Spherepoint*>& points) {
 		Spherepoint * itUp    = new Spherepoint((*it)->phi           , (*it)->theta + 0.001);
 		Spherepoint * itDown  = new Spherepoint((*it)->phi           , (*it)->theta - 0.001);
 
-		if ((sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
-			- sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
+		if (((*it)->getDistanceTo(**closest3)
+			- (*it)->getDistanceTo(*closest2)
 			< eps) 
 			&&
-			(sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
-			- sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
-			)) {
-			if (sqrt( pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->x - (*closest1)->x,2) + pow(itLeft->z - (*closest1)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+			((*it)->getDistanceTo(*closest2)
+			 - (*it)->getDistanceTo(*closest1)
+			< eps)
+		) {
+			if (itLeft->getDistanceTo(*closest1)
+				+ itLeft->getDistanceTo(*closest2)
+				+ itLeft->getDistanceTo(*closest3)
 				 > 
-				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
-				+ sqrt( pow((*it)->x - (*closest2)->x,2) + pow((*it)->x - (*closest2)->x,2) + pow((*it)->z - (*closest2)->z,2))
-				+ sqrt( pow((*it)->x - (*closest3)->x,2) + pow((*it)->x - (*closest3)->x,2) + pow((*it)->z - (*closest3)->z,2))
+				(*it)->getDistanceTo(*closest1)
+				+ (*it)->getDistanceTo(*closest2)
+				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->phi -= 0.001;
 					std::cout << " i=" << i << " new=LEFT" << std::endl;
-			} else if (sqrt( pow(itRight->x - (*closest1)->x,2) + pow(itRight->x - (*closest1)->x,2) + pow(itRight->z - (*closest1)->z,2)) 
-				+ sqrt( pow(itRight->x - (*closest2)->x,2) + pow(itRight->x - (*closest2)->x,2) + pow(itRight->z - (*closest2)->z,2)) 
-				+ sqrt( pow(itRight->x - (*closest3)->x,2) + pow(itRight->x - (*closest3)->x,2) + pow(itRight->z - (*closest3)->z,2)) 
+			} else if (itRight->getDistanceTo(*closest1)
+				+ itRight->getDistanceTo(*closest2)
+				+ itRight->getDistanceTo(*closest3)
 				 > 
-				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+				(*it)->getDistanceTo(*closest1)
+				+ (*it)->getDistanceTo(*closest2)
+				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->phi += 0.001;
 					std::cout << " i=" << i << " new=RIGHT" << std::endl;
 			}
 	
 			//The following if-else-clause is for theta movement 
-			if (sqrt( pow(itUp->x - (*closest1)->x,2) + pow(itUp->x - (*closest1)->x,2) + pow(itUp->z - (*closest1)->z,2))
-				+ sqrt( pow(itUp->x - (*closest1)->x,2) + pow(itUp->x - (*closest1)->x,2) + pow(itUp->z - (*closest1)->z,2))
+			if (itUp->getDistanceTo(*closest1)
+				+ itUp->getDistanceTo(*closest2)
+				+ itUp->getDistanceTo(*closest3)
 				 > 
-				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+				(*it)->getDistanceTo(*closest1)
+				+ (*it)->getDistanceTo(*closest2)
+				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->theta += 0.001;
 					std::cout << " i=" << i << " new=UP" << std::endl;
-			} else if (sqrt( pow(itDown->x - (*closest1)->x,2) + pow(itDown->x - (*closest1)->x,2) + pow(itDown->z - (*closest1)->z,2))
-				+ sqrt( pow(itDown->x - (*closest2)->x,2) + pow(itDown->x - (*closest2)->x,2) + pow(itDown->z - (*closest2)->z,2))
-				+ sqrt( pow(itDown->x - (*closest3)->x,2) + pow(itDown->x - (*closest3)->x,2) + pow(itDown->z - (*closest3)->z,2))
+			} else if (itDown->getDistanceTo(*closest1)
+				+ itDown->getDistanceTo(*closest2)
+				+ itDown->getDistanceTo(*closest3)
 				 > 
-				sqrt( pow((*it)->x - (*closest1)->x,2) + pow((*it)->x - (*closest1)->x,2) + pow((*it)->z - (*closest1)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->x - (*closest2)->x,2) + pow(itLeft->z - (*closest2)->z,2))
-				+ sqrt( pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->x - (*closest3)->x,2) + pow(itLeft->z - (*closest3)->z,2))
+				(*it)->getDistanceTo(*closest1)
+				+ (*it)->getDistanceTo(*closest2)
+				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->theta -= 0.001;
 					std::cout << " i=" << i << " new=DOWN" << std::endl;
@@ -252,7 +165,6 @@ int main() {
 	std::cout << "After moving...\n" ;
 	Sphereprint(Spoints);
 		
-	//std::list<Spherepoint>::iterator it = std::next(Spoints.begin(), 0);
 	it = std::next(Spoints.begin(), 0);
 
   // Sphere 1
@@ -386,7 +298,7 @@ int main() {
   renderWindowInteractor->SetRenderWindow(renderWindow);
  
   // Add the actors to the scene
-//  renderer->AddActor(actor1);
+  renderer->AddActor(actor1);
   renderer->AddActor(actor2);
   renderer->AddActor(actor3);
   renderer->AddActor(actor4);
