@@ -3,6 +3,7 @@
 #include<cfloat> // FLT_MIN
 #include<cmath> // abs
 #include<algorithm>
+#include"Spherepoint/Spherepoint.hpp"
 
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
@@ -81,22 +82,6 @@ void fun2 (std::list<T>& points) {
 		*it -= FLT_MIN;
 	}
 */
-}
-
-class Spherepoint{
-	public:
-	float phi, theta;
-	float x,y,z;
-	void setCoord();	
-	Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {
-		this->setCoord();
-	} 
-};
-
-void Spherepoint::setCoord () {
-	this->x = cos(theta) * cos(phi);
-	this->y = cos(theta) * sin(phi);
-	this->z = sin(theta);
 }
 
 void fun4 (std::list<Spherepoint*>& points) {
