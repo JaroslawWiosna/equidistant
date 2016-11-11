@@ -1,6 +1,6 @@
 ### VISUALIZATION
 ![IMG](http://i.imgur.com/cMNS8zG.png)
-
+![IMG](http://i.imgur.com/QK5mswG.png)
 ## MEANING
 [whats-the-word-for-having-the-same-distance-to-neighbours](http://english.stackexchange.com/questions/318094/whats-the-word-for-having-the-same-distance-to-neighbours/318257)
 
