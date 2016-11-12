@@ -67,7 +67,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 		Spherepoint * itUp    = new Spherepoint((*it)->phi           , (*it)->theta + 0.001);
 		Spherepoint * itDown  = new Spherepoint((*it)->phi           , (*it)->theta - 0.001);
 
-		if (((*it)->getDistanceTo(**closest3)
+		if (((*it)->getDistanceTo(*closest3)
 			- (*it)->getDistanceTo(*closest2)
 			< eps) 
 			&&
@@ -122,10 +122,10 @@ void fun4 (std::list<Spherepoint*>& points) {
 		}
 		(*it)->setCoord();
 
-		free(itLeft);
-		free(itRight);
-		free(itUp);
-		free(itDown);
+		delete itLeft;
+		delete itRight;
+		delete itUp;
+		delete itDown;
 	}
 }
 
@@ -144,9 +144,9 @@ void Sphereprint (std::list<Spherepoint*>& points) {
 int main() {
 	Spherepoint * test= new Spherepoint();
 	Spherepoint * obj1= new Spherepoint(1,0.7);
-	Spherepoint * obj2= new Spherepoint(3,0.1);
-	Spherepoint * obj3= new Spherepoint(4,0.1);
-	Spherepoint * obj4= new Spherepoint(0.1,-1);
+	Spherepoint * obj2= new Spherepoint(2,0.4);
+	Spherepoint * obj3= new Spherepoint(3,-0.3);
+	Spherepoint * obj4= new Spherepoint(0.1,-0.7555);
 	Spherepoint * obj5= new Spherepoint(0,0);
 	Spherepoint * obj6= new Spherepoint(0,0);
 
@@ -155,9 +155,9 @@ int main() {
 	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 200000; ++i) {
+	for (std::size_t i = 1; i < 80000; ++i) {
 		fun4(Spoints);
-		std::cout << i/2000.0 << " %       \r"; 
+		std::cout << i/800.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
@@ -324,12 +324,12 @@ int main() {
   stlWriter->SetInputConnection(sphereSource5->GetOutputPort());
   stlWriter->Write();
 
-	free(obj1);
-	free(obj2);
-	free(obj3);
-	free(obj4);
-	free(obj5);
-	free(obj6);
+	delete obj1;
+	delete obj2;
+	delete obj3;
+	delete obj4;
+	delete obj5;
+	delete obj6;
 
 
   return EXIT_SUCCESS;
