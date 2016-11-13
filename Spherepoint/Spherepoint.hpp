@@ -27,13 +27,13 @@ void Spherepoint::setCoord () {
 
 float Spherepoint::getDistanceTo(Spherepoint* point) {
 	return sqrt( pow(this->x - point->x,2) 
-		+ pow(this->x - point->x,2) 
+		+ pow(this->y - point->y,2) 
 		+ pow(this->z - point->z,2));
 }
 
 float Spherepoint::getDistanceTo(Spherepoint& point) {
 	return sqrt( pow(this->x - point.x,2) 
-		+ pow(this->x - point.x,2) 
+		+ pow(this->y - point.y,2) 
 		+ pow(this->z - point.z,2));
 }
 
