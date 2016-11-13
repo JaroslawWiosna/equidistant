@@ -71,31 +71,30 @@ void fun5 (std::list<Squarepoint*>& points) {
 				) {
 					(*it)->x -= 0.001;
 					if ((*it)->x < 0) (*it)->x = 0;
-					std::cout << " i=" << i << " new=LEFT" << std::endl;
+					//std::cout << " i=" << i << " new=LEFT" << std::endl;
 			} else if (itRight->getDistanceTo(*closest1)
 				 > 
 				(*it)->getDistanceTo(*closest1)
 				) {
 					(*it)->x += 0.001;
 					if ((*it)->x > 1) (*it)->x = 1;
-					std::cout << " i=" << i << " new=RIGHT" << std::endl;
+					//std::cout << " i=" << i << " new=RIGHT" << std::endl;
 			}
-	
-			//The following if-else-clause is for theta movement 
+
 			if (itUp->getDistanceTo(*closest1)
 				 > 
 				(*it)->getDistanceTo(*closest1)
 				) {
 					(*it)->y += 0.001;
 					if ((*it)->y > 1) (*it)->y = 1;
-					std::cout << " i=" << i << " new=UP" << std::endl;
+					//std::cout << " i=" << i << " new=UP" << std::endl;
 			} else if (itDown->getDistanceTo(*closest1)
 				 > 
 				(*it)->getDistanceTo(*closest1)
 				) {
 					(*it)->y -= 0.001;
 					if ((*it)->y < 0) (*it)->y = 0;
-					std::cout << " i=" << i << " new=DOWN" << std::endl;
+					//std::cout << " i=" << i << " new=DOWN" << std::endl;
 			}
 
 		delete itLeft;
@@ -118,10 +117,10 @@ void Squareprint (std::list<Squarepoint*>& points) {
 
 
 int main() {
-	Squarepoint * obj1= new Squarepoint(0.1,0.1);
-	Squarepoint * obj2= new Squarepoint(0.9,0.9);
-	Squarepoint * obj3= new Squarepoint(0.1,0.9);
-	Squarepoint * obj4= new Squarepoint(0.9,0.9);
+	Squarepoint * obj1= new Squarepoint(0.11,0.14);
+	Squarepoint * obj2= new Squarepoint(0.91,0.92);
+	Squarepoint * obj3= new Squarepoint(0.12,0.93);
+	Squarepoint * obj4= new Squarepoint(0.96,0.95);
 	Squarepoint * obj5= new Squarepoint(0.5,0.5);
 	Squarepoint * obj6= new Squarepoint(0.90,0.71);
 	Squarepoint * obj7= new Squarepoint(0.86,0.67);
@@ -131,10 +130,20 @@ int main() {
 	std::list<Squarepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
 	Squareprint(Spoints);
-	for (std::size_t i = 1; i < 800; ++i) {
+	std::size_t size = Spoints.size();
+	for (std::size_t i = 1; i < 888884; ++i) {
 		fun5(Spoints);
-		std::cout << i/80.0 << " %       \r"; 
+		//std::cout << i/80.0 << " %       \r"; 
+		for (std::size_t i = 0; i < size; ++i) {
+			std::list<Squarepoint*>::iterator it = std::next(Spoints.begin(), i);
+			std::cout << "(" << (*it)->x << ", " << (*it)->y << ") "; 
+			std::cout.flush();
+		}
+		std::cout << "                       \r";
+		for(int ii = 0; i<100000000; ++i);
 		std::cout.flush();
+	
+	//std::cout.flush();
 	}
 	std::cout << std::endl;
 
