@@ -19,15 +19,17 @@ else()
   target_link_libraries(equidistant vtkHybrid vtkWidgets)
 endif()
 #######
-PROJECT(Sphere)
- 
+
+project (square)
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
- 
-add_executable(Sphere MACOSX_BUNDLE Sphere.cxx)
+find_package(Gtest)
+add_executable(square MACOSX_BUNDLE square.cpp) 
+target_link_libraries(square gtest pthread)
  
 if(VTK_LIBRARIES)
-  target_link_libraries(Sphere ${VTK_LIBRARIES})
+  target_link_libraries(square ${VTK_LIBRARIES})
 else()
-  target_link_libraries(Sphere vtkHybrid vtkWidgets)
+  target_link_libraries(square vtkHybrid vtkWidgets)
 endif()
+#######
