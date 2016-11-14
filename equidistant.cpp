@@ -57,7 +57,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 		closest1 = std::next(points.begin(), distance[1].first );
 		closest2 = std::next(points.begin(), distance[2].first );
 		closest3 = std::next(points.begin(), distance[3].first );
-//		std::cout << "indexes:::::" << distance[0].first  << distance[1].first  << distance[2].first << distance[3].first << std::endl;
+		std::cout << "indexes:::::" << distance[0].first  << distance[1].first  << distance[2].first << distance[3].first << std::endl;
 		//now we know what are the 3 closest points
 		//lets make one step left, one right and check which is better
 
@@ -67,59 +67,55 @@ void fun4 (std::list<Spherepoint*>& points) {
 		Spherepoint * itUp    = new Spherepoint((*it)->phi           , (*it)->theta + 0.001);
 		Spherepoint * itDown  = new Spherepoint((*it)->phi           , (*it)->theta - 0.001);
 
-		if (((*it)->getDistanceTo(*closest3)
-			- (*it)->getDistanceTo(*closest2)
-			< eps) 
-			&&
-			((*it)->getDistanceTo(*closest2)
-			 - (*it)->getDistanceTo(*closest1)
-			< eps)
-		) {
 			if (itLeft->getDistanceTo(*closest1)
-				+ itLeft->getDistanceTo(*closest2)
-				+ itLeft->getDistanceTo(*closest3)
+//				+ itLeft->getDistanceTo(*closest2)
+//				+ itLeft->getDistanceTo(*closest3)
 				 > 
 				(*it)->getDistanceTo(*closest1)
-				+ (*it)->getDistanceTo(*closest2)
-				+ (*it)->getDistanceTo(*closest3)
+//				+ (*it)->getDistanceTo(*closest2)
+//				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->phi -= 0.001;
+					if ( (*it)->phi < 0) (*it)->phi += 2*PI;
 					std::cout << " i=" << i << " new=LEFT" << std::endl;
 			} else if (itRight->getDistanceTo(*closest1)
-				+ itRight->getDistanceTo(*closest2)
-				+ itRight->getDistanceTo(*closest3)
+//				+ itRight->getDistanceTo(*closest2)
+//				+ itRight->getDistanceTo(*closest3)
 				 > 
 				(*it)->getDistanceTo(*closest1)
-				+ (*it)->getDistanceTo(*closest2)
-				+ (*it)->getDistanceTo(*closest3)
+//				+ (*it)->getDistanceTo(*closest2)
+//				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->phi += 0.001;
+					if ( (*it)->phi > 2*PI) (*it)->phi -= 2*PI;
 					std::cout << " i=" << i << " new=RIGHT" << std::endl;
 			}
 	
 			//The following if-else-clause is for theta movement 
 			if (itUp->getDistanceTo(*closest1)
-				+ itUp->getDistanceTo(*closest2)
-				+ itUp->getDistanceTo(*closest3)
+//				+ itUp->getDistanceTo(*closest2)
+//				+ itUp->getDistanceTo(*closest3)
 				 > 
 				(*it)->getDistanceTo(*closest1)
-				+ (*it)->getDistanceTo(*closest2)
-				+ (*it)->getDistanceTo(*closest3)
+//				+ (*it)->getDistanceTo(*closest2)
+//				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->theta += 0.001;
+					if ( (*it)->theta > 1.570796) (*it)->theta = 1.570796;
 					std::cout << " i=" << i << " new=UP" << std::endl;
 			} else if (itDown->getDistanceTo(*closest1)
-				+ itDown->getDistanceTo(*closest2)
-				+ itDown->getDistanceTo(*closest3)
+//				+ itDown->getDistanceTo(*closest2)
+//				+ itDown->getDistanceTo(*closest3)
 				 > 
 				(*it)->getDistanceTo(*closest1)
-				+ (*it)->getDistanceTo(*closest2)
-				+ (*it)->getDistanceTo(*closest3)
+//				+ (*it)->getDistanceTo(*closest2)
+//				+ (*it)->getDistanceTo(*closest3)
 				) {
 					(*it)->theta -= 0.001;
+					if ( (*it)->theta < -1.570796) (*it)->theta = -1.570796;
 					std::cout << " i=" << i << " new=DOWN" << std::endl;
 			}
-		}
+		
 		(*it)->setCoord();
 
 		delete itLeft;
@@ -133,7 +129,13 @@ void Sphereprint (std::list<Spherepoint*>& points) {
 	std::size_t size = points.size();
 	for (std::size_t i = 0; i < size; ++i) {
 		std::list<Spherepoint*>::iterator it = std::next(points.begin(), i);
-		std::cout << i <<".--\t" << (*it)->x << " " << (*it)->y << " " << (*it)->z << " " << (*it)->theta    << " " << (*it)->phi << std::endl; 
+		std::cout << i <<".--\t" 
+			<< (*it)->x << " " 
+			<< (*it)->y << " " 
+			<< (*it)->z << " " 
+			<< (*it)->phi << " " 
+			<< (*it)->theta 
+			<< " " << std::endl; 
 	}
 	std::cout << std::endl;
 	
@@ -155,9 +157,9 @@ int main() {
 	std::list<Spherepoint*>::iterator it = std::next(Spoints.begin(), 0);
 
 	Sphereprint(Spoints);
-	for (std::size_t i = 1; i < 80000; ++i) {
+	for (std::size_t i = 1; i < 8000; ++i) {
 		fun4(Spoints);
-		std::cout << i/800.0 << " %       \r"; 
+		std::cout << i/80.0 << " %       \r"; 
 		std::cout.flush();
 	}
 	std::cout << std::endl;
