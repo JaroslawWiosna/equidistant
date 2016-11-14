@@ -27,7 +27,7 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 
-float PI = 3.14; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
+//float PI = 3.14; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
  
 void fun4 (std::list<Spherepoint*>& points) {
 	std::list<Spherepoint*>::iterator closest0, closest1, closest2, closest3;
@@ -60,6 +60,13 @@ void fun4 (std::list<Spherepoint*>& points) {
 		std::cout << "indexes:::::" << distance[0].first  << distance[1].first  << distance[2].first << distance[3].first << std::endl;
 		//now we know what are the 3 closest points
 		//lets make one step left, one right and check which is better
+
+		float thetaMovement = (*it)->theta;
+		if( std::abs(thetaMovement) > ((PI / 2.0) - 0.01 ))
+		for (std::size_t j = 0; j < size; ++j) {
+			jt = std::next(points.begin(), j);
+			(*jt)->rotate((-1)*thetaMovement);
+		}
 
 		Spherepoint * itLeft  = new Spherepoint((*it)->phi - 0.001 , (*it)->theta);
 		Spherepoint * itRight = new Spherepoint((*it)->phi + 0.001 , (*it)->theta);
