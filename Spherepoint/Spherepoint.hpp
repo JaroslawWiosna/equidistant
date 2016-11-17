@@ -45,13 +45,20 @@ void Spherepoint::rotate(float thetaMovement) {
 	if (this->theta > PI / 2.0) {
 		this->theta = PI - this->theta; // PI / 2.0 - (this->theta - PI / 2.0);
 		this->phi += PI;
+		if (this->phi > 2.0*PI) {
+			this->phi -= 2.0*PI;
+		}
 	}
 	
 	if (this->theta < (-1) * PI / 2.0) {
 		this->theta = (-1) * PI - this->theta;
 		this->phi += PI;
+		if (this->phi < 0) {
+			this->phi += 2.0*PI;
+		}
 	}
 	
+	this->setCoord();
 	
 }
 

@@ -62,7 +62,7 @@ void fun4 (std::list<Spherepoint*>& points) {
 		//lets make one step left, one right and check which is better
 
 		float thetaMovement = (*it)->theta;
-		if( std::abs(thetaMovement) > ((PI / 2.0) - 0.01 ))
+		if( std::abs(thetaMovement) > ((PI / 2.0) - 0.1 ))
 		for (std::size_t j = 0; j < size; ++j) {
 			jt = std::next(points.begin(), j);
 			(*jt)->rotate((-1)*thetaMovement);

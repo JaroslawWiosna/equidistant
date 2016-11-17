@@ -1,4 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
+
+option(BUILD_TESTS "Build tests" ON)
+
 SET(CMAKE_CXX_STANDARD 14)
 SET(COMPILE_FLAGS "-std=c++14 -std=gnu++14 -Wall")
 SET(LINK_FLAGS "-lgtest -lpthread")
@@ -33,3 +36,8 @@ else()
   target_link_libraries(square vtkHybrid vtkWidgets)
 endif()
 #######
+
+if(BUILD_TESTS)
+  add_subdirectory(test)
+endif()
+
