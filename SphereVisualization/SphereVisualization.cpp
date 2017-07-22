@@ -75,9 +75,9 @@ renderWindowInteractor->Start();
   vtkSmartPointer<vtkSTLWriter> stlWriter =
     vtkSmartPointer<vtkSTLWriter>::New();
   stlWriter->SetFileName("object_test.stl");
-  stlWriter->SetInputConnection(sphereSources[0]->GetOutputPort());
-  stlWriter->SetInputConnection(sphereSources[1]->GetOutputPort());
-  stlWriter->SetInputConnection(sphereSources[2]->GetOutputPort());
+  for(std::size_t i=0 ; i<size ; ++i) {
+    stlWriter->SetInputConnection(sphereSources[i]->GetOutputPort());
+  }
 stlWriter->Write();
     delete [] sphereSources;
     delete [] mappers;
