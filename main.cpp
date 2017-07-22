@@ -23,7 +23,7 @@ void funRand(std::list<Spherepoint*>& points) {
     std::vector < std::pair<std::size_t , float>> distance;
     std::pair<std::size_t , float> tmp_pair;
     std::list<Spherepoint*>::iterator it, jt;
-    float PI = M_PI;
+    double PI = M_PI;
 
     std::size_t i = rand()%size;
         it = std::next(points.begin(), i);
@@ -230,8 +230,8 @@ int main(int argc, char** argv ) {
 
     //---------------
 
-//    SphereVisualization gridVis{gridPointsList};
-//    gridVis.showAll();
+    SphereVisualization gridVis{gridPointsList};
+    gridVis.showAll();
 
     for (auto& i : gridPointsList) {
         i->setCoord();

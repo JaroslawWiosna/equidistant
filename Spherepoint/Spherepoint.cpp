@@ -9,7 +9,7 @@
  */
 
 #include "Spherepoint.hpp"
-float PI = M_PI; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
+double PI = M_PI; // FIXME: http://stackoverflow.com/questions/1727881/how-to-use-the-pi-constant-in-c
 
 Spherepoint::Spherepoint(float PHI = 0, float THETA = 0) : phi(PHI), theta(THETA) {
     this->setCoord();
@@ -39,11 +39,11 @@ void Spherepoint::setCoord () {
 }
 
 float Spherepoint::getDistanceTo(Spherepoint* point) {
-    return acos(( (sin(phi) * sin(point->phi) ) + ( cos(phi) * cos(point->phi) * cos(theta-point->theta)) ));
+    return acos(( (sin(theta) * sin(point->theta) ) + ( cos(theta) * cos(point->theta) * cos(phi - point->phi)) ));
 }
 
 float Spherepoint::getDistanceTo(Spherepoint& point) {
-    return acos(( (sin(phi) * sin(point.phi) ) + ( cos(phi) * cos(point.phi) * cos(theta-point.theta)) ));
+    return acos(( (sin(theta) * sin(point.theta) ) + ( cos(theta) * cos(point.theta) * cos(phi - point.phi)) ));
 }
 
 void Spherepoint::rotate(float thetaMovement) {
