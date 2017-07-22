@@ -187,7 +187,7 @@ int main(int argc, char** argv ) {
 
     //---------------
 
-    constexpr std::size_t numberOfGridPoints{500};
+    constexpr std::size_t numberOfGridPoints{10000};
     
     std::list<Spherepoint*> gridPointsList{};
     for (std::size_t i=0 ; i < numberOfGridPoints ; ++i) {
@@ -212,7 +212,19 @@ int main(int argc, char** argv ) {
            float z = 1 - 2*(pow(x1,2)+pow(x2,2));
            float phi = (0.5 * M_PI - std::atan2(y,x));
            float theta = std::asin(z/(sqrt(x*x + y*y + z*z)));
-           gridPointsList.push_back(new Spherepoint{phi,theta});
+            float distanceToClosest = 100;
+            Spherepoint tmp{phi,theta};
+            for (auto& i : gridPointsList) {
+                if (i->getDistanceTo(tmp) < distanceToClosest) {
+                     distanceToClosest = i->getDistanceTo(tmp);
+                }
+            }
+            if (distanceToClosest > 0.07) {
+                gridPointsList.push_back(new Spherepoint{phi,theta});
+                std::cout << "New point!\n";
+            } else {
+//                std::cout << "Already in the list!\n";
+            }
         }
     }
 
@@ -227,7 +239,7 @@ int main(int argc, char** argv ) {
 
     //---------------
 
-    for (int i=0 ; i < 700 ; ++i) {
+    for (int i=0 ; i < 70000 ; ++i) {
         funOnGridRand(Spoints,gridPointsList);      
     }
 
