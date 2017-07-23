@@ -1,5 +1,6 @@
 # EQUIDISTANT
 
+#### [one-dimentional space](https://en.wikipedia.org/wiki/One-dimensional_space)
 Imagine a [closed line segment](https://en.wikipedia.org/wiki/Line_segment) with two or more points randomly put on it. It is unlikely that the points would be equidistant.
 
 > [equidistant](http://www.thefreedictionary.com/equidistant) - equally distant.
@@ -7,6 +8,7 @@ Imagine a [closed line segment](https://en.wikipedia.org/wiki/Line_segment) with
 
 ...but we know that putting the points in one dimentional line is no a big deal. One has to simply... It doesn't matter. No one cares about points.
 
+#### [two-dimentional space](https://en.wikipedia.org/wiki/Two-dimensional_space)
 So let's make next step: What about 2D?
 
 Here is an analogy:
@@ -14,12 +16,18 @@ Here is an analogy:
 Imagine [cow grazing](http://dictionary.cambridge.org/dictionary/english/graze).
 Each animal wants to be as far away from another as possible, so it can eat grass in peace.
 
+#### [sphere](https://en.wikipedia.org/wiki/Sphere)
 Let's make next step: What about sphere?
 Nowadays it is belived that people have to think globally. Let's make an assumption that Earth is not flat. In fact Earth is a huge sphere.
 
 What is the algorithm for equidistance the points on a sphere? But is it even possible?
 
 Yes, it is, but only for [platonic solids](https://en.wikipedia.org/wiki/Platonic_solid)
+#### [platonic solids](https://en.wikipedia.org/wiki/Platonic_solid)
+
+| Tetrahedron | Cube      | Octahedron  | Dodecahedron | Icosahedron  |
+|-------------|-----------|-------------|--------------|--------------|
+| Four faces  | Six faces | Eight faces | Twelve faces | Twenty faces |
 
 The ultimate question of this project is: 
 What will happen if we want to make five or seven equidistanced on a sphere?
@@ -43,3 +51,5 @@ http://mathworld.wolfram.com/SpherePointPicking.html
 # TROUBLESHOTING
  sudo apt-get install libvtk6-dev tcl-vtk
  sudo ln -s /usr/lib/x86_64-linux-gnu/libproj.so.9 /usr/lib/x86_64-linux-gnu/libproj.so 
+
+
