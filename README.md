@@ -10,6 +10,8 @@
 
 ---
 
+## Overview
+
 #### [one-dimentional space](https://en.wikipedia.org/wiki/One-dimensional_space)
 
 Imagine a [closed line segment](https://en.wikipedia.org/wiki/Line_segment) with two or more points randomly put on it. It is unlikely that the points would be equidistant.
