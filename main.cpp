@@ -104,11 +104,11 @@ void funOnGridRand(std::list<Spherepoint*>& points, std::list<Spherepoint*>& gri
         float distanceToClosestFromNewPoint = distanceFromNewPoint[0].second;
         if (distanceToClosestFromNewPoint > distanceToClosest + 0.6)
             {
-            std::cout << "CHANGE\n\n";
-            std::cout << "phi=" << (*it)->phi << "\t->" << newPhi << "\n"; 
-            std::cout << "theta=" << (*it)->theta << "\t->" << newTheta << "\n"; 
-            std::cout << "dTCFNP" << distanceToClosestFromNewPoint << "\n"; 
-            std::cout << "dTC" << distanceToClosest << "\n"; 
+//            std::cout << "CHANGE\n\n";
+//            std::cout << "phi=" << (*it)->phi << "\t->" << newPhi << ""; 
+//            std::cout << "theta=" << (*it)->theta << "\t->" << newTheta << ""; 
+            std::cout << "dTCFNP " << distanceToClosestFromNewPoint << "\t"; 
+            std::cout << " dTC" << distanceToClosest << "\r" << std::flush; 
             (*it)->phi = newPhi;
             (*it)->theta = newTheta;
             (*it)->setCoord();
@@ -173,35 +173,41 @@ int main(int argc, char** argv ) {
 
     srand(time(NULL));
 
-//    std::size_t numberOfPoints = 4;
-    std::unique_ptr<Spherepoint> point01{new Spherepoint{0, 0.1}};
-    std::unique_ptr<Spherepoint> point02{new Spherepoint{0, 0.2}};
-    std::unique_ptr<Spherepoint> point03{new Spherepoint{0, 0.3}};
-    std::unique_ptr<Spherepoint> point04{new Spherepoint{0, 0.4}};
-
+    std::size_t numberOfPoints = 20;
     std::list<Spherepoint*> Spoints{}; 
-    Spoints.push_back(point01.get());
-    Spoints.push_back(point02.get());
-    Spoints.push_back(point03.get());
-    Spoints.push_back(point04.get());
+    for (std::size_t i=0 ; i < numberOfPoints ; ++i) {
+        float x1 = -1 + static_cast<float>(rand())
+           /(static_cast<float>(RAND_MAX/2));
+        float x2 = -1 + static_cast<float>(rand())
+           /(static_cast<float>(RAND_MAX/2));
+        if ((pow(x1,2) + pow(x2,2)) < 1) {
+           float x = 2*x1*sqrt(1 - pow(x1,2) - pow(x2,2));
+           float y = 2*x2*sqrt(1 - pow(x1,2) - pow(x2,2));
+           float z = 1 - 2*(pow(x1,2)+pow(x2,2));
+           float phi = (0.5 * M_PI - std::atan2(y,x));
+           float theta = std::asin(z/(sqrt(x*x + y*y + z*z)));
+            float distanceToClosest = 100;
+            Spherepoint tmp{phi,theta};
+            for (auto& i : Spoints) {
+                if (i->getDistanceTo(tmp) < distanceToClosest) {
+                     distanceToClosest = i->getDistanceTo(tmp);
+                }
+            }
+            if (distanceToClosest > 0.07) {
+                Spoints.push_back(new Spherepoint{phi,theta});
+                std::cout << "New point!\n";
+            } else {
+//                std::cout << "Already in the list!\n";
+            }
+        }
+    }
 
     //---------------
 
-    constexpr std::size_t numberOfGridPoints{10000};
+    constexpr std::size_t numberOfGridPoints{5000};
     
     std::list<Spherepoint*> gridPointsList{};
     for (std::size_t i=0 ; i < numberOfGridPoints ; ++i) {
-/*
-        float uRandom = -1 + static_cast<float>(rand())
-           /(static_cast<float>(RAND_MAX/2));
-        float thetaRandom = static_cast<float>(rand())
-           /(static_cast<float>(RAND_MAX/ (2*M_PI)));
-        float x = sqrt(1 - pow(uRandom,2)) * cos(thetaRandom);
-        float y = sqrt(1 - pow(uRandom,2)) * sin(thetaRandom);
-        float z = uRandom;
-        float phi = (0.5 * M_PI - std::atan2(y,x));
-        float theta = std::asin(z/(sqrt(x*x + y*y + z*z)));
-*/
         float x1 = -1 + static_cast<float>(rand())
            /(static_cast<float>(RAND_MAX/2));
         float x2 = -1 + static_cast<float>(rand())
@@ -230,8 +236,8 @@ int main(int argc, char** argv ) {
 
     //---------------
 
-    SphereVisualization gridVis{gridPointsList};
-    gridVis.showAll();
+//    SphereVisualization gridVis{gridPointsList};
+//    gridVis.showAll();
 
     for (auto& i : gridPointsList) {
         i->setCoord();
@@ -247,7 +253,7 @@ int main(int argc, char** argv ) {
     gridPointsList.remove_if([](Spherepoint * elem){delete elem; return true;});
 
     std::list<Spherepoint*>::iterator it;
-    for (int i=0 ; i < 4 ; ++i) {
+    for (unsigned int i=0 ; i < numberOfPoints ; ++i) {
         it = std::next(Spoints.begin(), i);
         std::cout << (*it)->phi <<"\t"<<(*it)->theta <<"\n";
     }
