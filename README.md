@@ -1,5 +1,5 @@
 [![Licence](https://img.shields.io/github/license/JaroslawWiosna/equidistant.svg)]()
-[![Release](https://img.shields.io/github/release/JaroslawWiosna/equidistant.svg?maxAge=3600)](https://github.com/JaroslawWiosna/level-set/releases)
+[![Release](https://img.shields.io/github/release/JaroslawWiosna/equidistant.svg?maxAge=3600)](https://github.com/JaroslawWiosna/equidistant/releases)
 [![GitHub contributors](https://img.shields.io/github/contributors/JaroslawWiosna/equidistant.svg)]()
 # EQUIDISTANT
 
