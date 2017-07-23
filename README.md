@@ -25,9 +25,10 @@ What is the algorithm for equidistance the points on a sphere? But is it even po
 Yes, it is, but only for [platonic solids](https://en.wikipedia.org/wiki/Platonic_solid)
 #### [platonic solids](https://en.wikipedia.org/wiki/Platonic_solid)
 
-| Tetrahedron | Cube      | Octahedron  | Dodecahedron | Icosahedron  |
-|-------------|-----------|-------------|--------------|--------------|
-| Four faces  | Six faces | Eight faces | Twelve faces | Twenty faces |
+| Tetrahedron | Cube         | Octahedron  | Dodecahedron  | Icosahedron   |
+|-------------|--------------|-------------|---------------|---------------|
+| Four faces  | Six faces    | Eight faces | Twelve faces  | Twenty faces  |
+| Four points | Eight points | Six points  | Twenty points | Twelve points |
 
 The ultimate question of this project is: 
 What will happen if we want to make five or seven equidistanced on a sphere?
