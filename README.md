@@ -26,8 +26,8 @@ What will happen if we want to make five or seven equidistanced on a sphere?
 
 ### TO-DO LIST
 
- [ ] - implement an algorithm for 4, 6, 8, 12, 20
- [ ] - check what is going to happen when thera are 5, 7 points.
+ - [ ] implement an algorithm for 4, 6, 8, 12, 20
+ - [ ] check what is going to happen when thera are 5, 7 points.
 
 
 
